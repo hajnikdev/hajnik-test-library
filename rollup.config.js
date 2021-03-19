@@ -16,12 +16,19 @@ export default [
       format: 'cjs'
     },
     plugins: [
-      resolve(),
-      external(),
+      resolve({
+        browser: true
+      }),
+      commonjs({
+        include: ['node_modules/**'],
+        namedExports: {
+          'react-dom': ['createPortal']
+        }
+      }),
       babel({
         exclude: 'node_modules/**'
       }),
-      commonjs(),
+      external(),
       uglify()
     ]
   },
@@ -31,12 +38,19 @@ export default [
       file: `${output}.modern.js`,
       format: 'es'
     },
+
     plugins: [
       resolve(),
-      external(),
+      commonjs({
+        include: ['node_modules/**'],
+        namedExports: {
+          'react-dom': ['createPortal']
+        }
+      }),
       babel({
         exclude: 'node_modules/**'
       }),
+      external(),
       terser()
     ]
   },
@@ -46,12 +60,21 @@ export default [
       name: 'ReactUi',
       file: `${output}.umd.js`,
       globals: {
-        react: 'React'
+        react: 'React',
+        'styled-components': 'styled',
+        'prop-types': 'PropTypes',
+        'prop-types/checkPropTypes': 'checkPropTypes'
       },
       format: 'umd'
     },
     plugins: [
       resolve(),
+      commonjs({
+        include: ['node_modules/**'],
+        namedExports: {
+          'react-dom': ['createPortal']
+        }
+      }),
       external(),
       babel({
         exclude: 'node_modules/**'
